@@ -3,7 +3,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { Montserrat } from 'next/font/google'
-import { Code, ImageIcon, LayoutDashboard, MessageSquare, Music, Settings, VideoIcon } from "lucide-react";
+import { Code,Plus, ImageIcon, LayoutDashboard, MessageSquare, Music, Settings, VideoIcon } from "lucide-react";
 import { usePathname } from "next/navigation";
 
 import { cn } from "@/lib/utils";
@@ -47,12 +47,19 @@ const routes = [
     icon: Code,
     color: "text-green-700",
     href: '/code',
-  },
-  {
-    label: 'Settings',
-    icon: Settings,
-    href: '/settings',
-  },
+  },{
+      icon: Plus,
+      href: '/companion/new',
+      label: "Create",
+      pro: true,
+    },
+    {
+      icon: Settings,
+      href: '/settings',
+      label: "Settings",
+      pro: false,
+    },
+  
 ];
 
 export const Sidebar = ({
