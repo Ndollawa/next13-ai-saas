@@ -1,6 +1,8 @@
-import { redirect } from "next/navigation";
-import { auth, redirectToSignIn } from "@clerk/nextjs";
+"use client"
 
+import { redirect } from "next/navigation";
+// import { auth, redirectToSignIn } from "@clerk/nextjs";
+import useAuth from '@/hooks/useAuth'
 import prismadb from "@/lib/prismadb";
 
 import { ChatClient } from "./components/client";
@@ -14,7 +16,8 @@ interface ChatIdPageProps {
 const ChatIdPage = async ({
   params
 }: ChatIdPageProps) => {
-  const { userId } = auth();
+  // const { userId } = auth();
+  const { id: userId } = useAuth();
 
   if (!userId) {
     return redirectToSignIn();

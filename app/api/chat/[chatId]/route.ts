@@ -1,13 +1,13 @@
 import dotenv from "dotenv";
 import { StreamingTextResponse, LangChainStream } from "ai";
-import { auth, currentUser } from "@clerk/nextjs";
+// import { auth, currentUser } from "@clerk/nextjs";
 import { Replicate } from "langchain/llms/replicate";
 import { CallbackManager } from "langchain/callbacks";
 import { NextResponse } from "next/server";
-
 import { MemoryManager } from "@/lib/memory";
 import { rateLimit } from "@/lib/rate-limit";
 import prismadb from "@/lib/prismadb";
+import { getUserId } from "@/lib/getUserId";
 
 dotenv.config({ path: `.env` });
 
@@ -17,13 +17,14 @@ export async function POST(
 ) {
   try {
     const { prompt } = await request.json();
-    const user = await currentUser();
+    // const user = await currentUser();
+    const user = await getUserId();
 
-    if (!user || !user.firstName || !user.id) {
+    if (!user) {
       return new NextResponse("Unauthorized", { status: 401 });
     }
 
-    const identifier = request.url + "-" + user.id;
+    const identifier = request.url + "-" + user;
     const { success } = await rateLimit(identifier);
 
     if (!success) {
@@ -39,7 +40,8 @@ export async function POST(
           create: {
             content: prompt,
             role: "user",
-            userId: user.id,
+            userId: user,
+            // userId: user.id,
           },
         },
       }
@@ -54,7 +56,7 @@ export async function POST(
 
     const companionKey = {
       companionName: name!,
-      userId: user.id,
+      userId: user,
       modelName: "llama2-13b",
     };
     const memoryManager = await MemoryManager.getInstance();
@@ -135,7 +137,7 @@ export async function POST(
             create: {
               content: response.trim(),
               role: "system",
-              userId: user.id,
+              userId: user,
             },
           },
         }
