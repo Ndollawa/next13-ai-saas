@@ -1,9 +1,9 @@
 "use client"
 
 import { redirect } from "next/navigation";
-// import { auth, redirectToSignIn } from "@clerk/nextjs";
-import useAuth from '@/hooks/useAuth'
+// import { auth, redirectToSignIn } from "@clerk/nextjs";await 
 import prismadb from "@/lib/prismadb";
+import useAuth from "@/hooks/useAuth";
 
 import { ChatClient } from "./components/client";
 
@@ -17,10 +17,10 @@ const ChatIdPage = async ({
   params
 }: ChatIdPageProps) => {
   // const { userId } = auth();
-  const { id: userId } = useAuth();
+  const { id: userId } = await useAuth();
 
   if (!userId) {
-    return redirectToSignIn();
+    return redirect('/login');
   }
 
   const companion = await prismadb.companion.findUnique({

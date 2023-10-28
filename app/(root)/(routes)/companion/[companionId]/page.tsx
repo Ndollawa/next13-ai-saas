@@ -17,7 +17,7 @@ const CompanionIdPage = async ({
   params
 }: CompanionIdPageProps) => {
   // const { userId } = auth();
-  const { id: userId } = useAuth();
+  const { id: userId } = await useAuth();
 
   if (!userId) {
     return redirect('/login');
